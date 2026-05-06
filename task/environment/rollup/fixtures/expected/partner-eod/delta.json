@@ -1,0 +1,25 @@
+{
+  "partner": "delta",
+  "accounts": {
+    "acct-150": {
+      "total": 7.25,
+      "transactionCount": 1,
+      "currency": "USD"
+    },
+    "acct-430": {
+      "total": -2.75,
+      "transactionCount": 1,
+      "currency": "USD"
+    },
+    "acct-440": {
+      "total": 0,
+      "transactionCount": 1,
+      "currency": "USD"
+    },
+    "acct-860": {
+      "total": 2.25,
+      "transactionCount": 1,
+      "currency": "USD"
+    }
+  }
+}

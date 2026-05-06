@@ -1,0 +1,15 @@
+{
+  "name": "daily-account-rollup",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Business-day account rollup for partner settlement feeds.",
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "start": "node src/index.mjs",
+    "diagnostics": "node src/index.mjs --diagnostics",
+    "inspect": "node tools/inspect-rollup.mjs"
+  }
+}

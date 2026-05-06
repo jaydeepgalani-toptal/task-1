@@ -1,0 +1,25 @@
+{
+  "partner": "alpha",
+  "accounts": {
+    "acct-100": {
+      "total": 120.5,
+      "transactionCount": 1,
+      "currency": "USD"
+    },
+    "acct-200": {
+      "total": -15.25,
+      "transactionCount": 1,
+      "currency": "USD"
+    },
+    "acct-300": {
+      "total": 0,
+      "transactionCount": 1,
+      "currency": "USD"
+    },
+    "acct-860": {
+      "total": 4,
+      "transactionCount": 1,
+      "currency": "USD"
+    }
+  }
+}

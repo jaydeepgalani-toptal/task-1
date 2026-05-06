@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+
+ROOT=/workspace/rollup
+
+mkdir -p "$ROOT/runtime" "$ROOT/out" "$ROOT/logs"
+rm -rf "$ROOT/out" "$ROOT/logs" "$ROOT/runtime/mock-state" "$ROOT/runtime/pids"
+mkdir -p "$ROOT/out" "$ROOT/logs" "$ROOT/runtime/mock-state" "$ROOT/runtime/pids"

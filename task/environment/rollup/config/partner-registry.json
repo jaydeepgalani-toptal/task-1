@@ -1,0 +1,69 @@
+{
+  "businessDate": "2026-05-06",
+  "partners": [
+    {
+      "id": "alpha",
+      "enabled": true,
+      "baseUrl": "http://127.0.0.1:4101",
+      "eventIdPath": "eventId",
+      "requestPath": "/events",
+      "currency": "USD",
+      "profile": "card-direct-v1",
+      "sortOrder": 10,
+      "sourceTsPath": "eventTs",
+      "accountPath": "accountId",
+      "settlement": {
+        "zone": "America/New_York",
+        "cutoffLocal": "18:00"
+      }
+    },
+    {
+      "id": "beta",
+      "enabled": true,
+      "baseUrl": "http://127.0.0.1:4102",
+      "eventIdPath": "eventId",
+      "requestPath": "/events",
+      "currency": "USD",
+      "profile": "ledger-wire-v2",
+      "sortOrder": 20,
+      "sourceTsPath": "record.eventTs",
+      "accountPath": "record.accountRef",
+      "settlement": {
+        "zone": "Europe/London",
+        "cutoffLocal": "17:00"
+      }
+    },
+    {
+      "id": "gamma",
+      "enabled": true,
+      "baseUrl": "http://127.0.0.1:4103",
+      "eventIdPath": "eventId",
+      "requestPath": "/events",
+      "currency": "USD",
+      "profile": "settle-pack-v3",
+      "sortOrder": 30,
+      "sourceTsPath": "clock.eventTs",
+      "accountPath": "payload.accountRef",
+      "settlement": {
+        "zone": "Asia/Tokyo",
+        "cutoffLocal": "16:00"
+      }
+    },
+    {
+      "id": "delta",
+      "enabled": true,
+      "baseUrl": "http://127.0.0.1:4104",
+      "eventIdPath": "eventId",
+      "requestPath": "/events",
+      "currency": "USD",
+      "profile": "ledger-wire-v2",
+      "sortOrder": 40,
+      "sourceTsPath": "mirror.eventTs",
+      "accountPath": "mirror.accountRef",
+      "settlement": {
+        "zone": "America/Los_Angeles",
+        "cutoffLocal": "14:30"
+      }
+    }
+  ]
+}

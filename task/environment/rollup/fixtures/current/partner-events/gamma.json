@@ -1,0 +1,76 @@
+{
+  "businessDate": "2026-05-06",
+  "partner": "gamma",
+  "events": [
+    {
+      "eventId": "g-200",
+      "clock": {
+        "eventTs": "2026-05-06T05:00:00Z"
+      },
+      "payload": {
+        "accountRef": "acct-200"
+      },
+      "entry": {
+        "code": "sale",
+        "amountText": "19.95"
+      },
+      "currency": "USD"
+    },
+    {
+      "eventId": "shared-300",
+      "clock": {
+        "eventTs": "2026-05-06T04:00:00Z"
+      },
+      "payload": {
+        "accountRef": "acct-300"
+      },
+      "entry": {
+        "code": "refund",
+        "amountText": "2.50"
+      },
+      "currency": "USD"
+    },
+    {
+      "eventId": "g-500a",
+      "clock": {
+        "eventTs": "2026-05-06T02:30:00Z"
+      },
+      "payload": {
+        "accountRef": "acct-500"
+      },
+      "entry": {
+        "code": "zero",
+        "amountText": "0.00"
+      },
+      "currency": "USD"
+    },
+    {
+      "eventId": "g-500b",
+      "clock": {
+        "eventTs": "2026-05-06T06:59:59Z"
+      },
+      "payload": {
+        "accountRef": "acct-500"
+      },
+      "entry": {
+        "code": "refund",
+        "amountText": "4.25"
+      },
+      "currency": "USD"
+    },
+    {
+      "eventId": "g-810",
+      "clock": {
+        "eventTs": "2026-05-06T07:00:00Z"
+      },
+      "payload": {
+        "accountRef": "acct-810"
+      },
+      "entry": {
+        "code": "sale",
+        "amountText": "6.60"
+      },
+      "currency": "USD"
+    }
+  ]
+}

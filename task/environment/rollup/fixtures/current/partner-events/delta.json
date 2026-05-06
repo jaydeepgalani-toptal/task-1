@@ -1,0 +1,76 @@
+{
+  "businessDate": "2026-05-06",
+  "partner": "delta",
+  "events": [
+    {
+      "eventId": "shared-100",
+      "record": {
+        "accountRef": "acct-315",
+        "eventTs": "2026-05-06T16:30:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-150",
+        "eventTs": "2026-05-06T20:00:00Z"
+      },
+      "entryType": "sale",
+      "amountMinorText": "725",
+      "currency": "USD"
+    },
+    {
+      "eventId": "d-430",
+      "record": {
+        "accountRef": "acct-431",
+        "eventTs": "2026-05-06T21:20:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-430",
+        "eventTs": "2026-05-06T21:20:00Z"
+      },
+      "entryType": "refund",
+      "amountMinorText": "275",
+      "currency": "USD"
+    },
+    {
+      "eventId": "d-440",
+      "record": {
+        "accountRef": "acct-441",
+        "eventTs": "2026-05-06T10:00:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-440",
+        "eventTs": "2026-05-06T19:00:00Z"
+      },
+      "entryType": "zero",
+      "amountMinorText": "0",
+      "currency": "USD"
+    },
+    {
+      "eventId": "shared-860",
+      "record": {
+        "accountRef": "acct-861",
+        "eventTs": "2026-05-06T17:30:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-860",
+        "eventTs": "2026-05-06T21:29:59Z"
+      },
+      "entryType": "sale",
+      "amountMinorText": "225",
+      "currency": "USD"
+    },
+    {
+      "eventId": "d-465",
+      "record": {
+        "accountRef": "acct-466",
+        "eventTs": "2026-05-06T09:00:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-465",
+        "eventTs": "2026-05-06T21:30:00Z"
+      },
+      "entryType": "sale",
+      "amountMinorText": "110",
+      "currency": "USD"
+    }
+  ]
+}

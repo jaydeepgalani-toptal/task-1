@@ -1,0 +1,90 @@
+{
+  "businessDate": "2026-05-06",
+  "partner": "beta",
+  "events": [
+    {
+      "eventId": "shared-100",
+      "record": {
+        "accountRef": "acct-100",
+        "eventTs": "2026-05-06T15:59:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-910",
+        "eventTs": "2026-05-06T22:45:00Z"
+      },
+      "entryType": "sale",
+      "amountMinor": 2500,
+      "currency": "USD"
+    },
+    {
+      "eventId": "shared-300",
+      "record": {
+        "accountRef": "acct-300",
+        "eventTs": "2026-05-06T15:00:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-930",
+        "eventTs": "2026-05-06T23:10:00Z"
+      },
+      "entryType": "sale",
+      "amountMinor": 1010,
+      "currency": "USD"
+    },
+    {
+      "eventId": "b-400",
+      "record": {
+        "accountRef": "acct-400",
+        "eventTs": "2026-05-06T08:00:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-940",
+        "eventTs": "2026-05-06T08:00:00Z"
+      },
+      "entryType": "refund",
+      "amountMinor": 500,
+      "currency": "USD"
+    },
+    {
+      "eventId": "b-710",
+      "record": {
+        "accountRef": "acct-710",
+        "eventTs": "2026-05-06T14:30:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-950",
+        "eventTs": "2026-05-06T23:59:00Z"
+      },
+      "entryType": "sale",
+      "amountMinor": 333,
+      "currency": "USD"
+    },
+    {
+      "eventId": "shared-860",
+      "record": {
+        "accountRef": "acct-860",
+        "eventTs": "2026-05-06T13:00:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-960",
+        "eventTs": "2026-05-06T20:30:00Z"
+      },
+      "entryType": "sale",
+      "amountMinor": 150,
+      "currency": "USD"
+    },
+    {
+      "eventId": "b-170",
+      "record": {
+        "accountRef": "acct-170",
+        "eventTs": "2026-05-06T16:00:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-970",
+        "eventTs": "2026-05-06T11:00:00Z"
+      },
+      "entryType": "zero",
+      "amountMinor": 0,
+      "currency": "USD"
+    }
+  ]
+}
