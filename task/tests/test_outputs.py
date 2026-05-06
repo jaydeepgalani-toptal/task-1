@@ -26,7 +26,7 @@ PACKAGE_JSON = ROOT / "package.json"
 PARTNERS = ("alpha", "beta", "gamma", "delta")
 
 ROOT_HASHES = {
-    "config/partner-registry.json": "87b29a1f2e244315c8e5d74fbfcfb3f49d727a0a83b2c1cd9db557274e2ed461",
+    "config/partner-registry.json": "6122b1fb40ba286f238d178bb720dd7c4008964d03287a1cc0d66430212c293d",
     "fixtures/current/partner-events/alpha.json": "a8360d145ea5fa1a6e4200d6533c2bd96d4c332eba2d63be1b12211da6d0995a",
     "fixtures/current/partner-events/beta.json": "a2a0a83353ff51f6584210d50a945596248ebac7259d5a1ac199ecaf65b07c4b",
     "fixtures/current/partner-events/gamma.json": "128796fa1e17d0738848a0c492a03c26e6c1a24ff5634511af88e6e53deded67",
@@ -171,6 +171,18 @@ def rollup_from_events(events):
         entry["total"] = round(entry["total"] + event["amount"], 2)
         entry["transactionCount"] += 1
     return {account: result[account] for account in sorted(result)}
+
+
+def rollup_from_events_with_dedupe(events):
+    seen = set()
+    retained = []
+    for event in events:
+        dedup_key = f"{event['partnerId']}:{event['accountId']}:{event['eventId']}"
+        if dedup_key in seen:
+            continue
+        seen.add(dedup_key)
+        retained.append(event)
+    return rollup_from_events(retained)
 
 
 def rollup_from_partner_eod(eod_dir: Path):
@@ -852,7 +864,7 @@ def test_same_process_event_id_path_change_rebuilds_compiled_context():
             default_fixture_expected = rollup_from_events(
                 authoritative_events(current_dir, REGISTRY)
             )
-            mutated_expected = rollup_from_events(
+            mutated_expected = rollup_from_events_with_dedupe(
                 authoritative_events(current_dir, registry_path)
             )
 
