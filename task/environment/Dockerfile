@@ -8,6 +8,7 @@ RUN apt-get update \
     && curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash \
     && . "$NVM_DIR/nvm.sh" && nvm install 22 \
     && npm install -g @openai/codex@latest \
+    && ln -sf "$(which node)" /usr/local/bin/node \
     && CODEX_BIN="$(readlink -f "$(command -v codex)")" \
     && ln -sf "$CODEX_BIN" /usr/local/bin/codex \
     && python3 -m pip install --break-system-packages --no-cache-dir pytest==8.4.1 pytest-json-ctrf==0.3.5 \
