@@ -4,6 +4,6 @@ Diagnose the actual cause using the local partner runtime APIs, partner EOD repo
 
 Partner EOD report endpoints may be used for investigation, but production rollup execution must not call them.
 
-Submit diagnosis/evidence.json with a concise record of the runtime evidence used: sampled business dates, sampled partners, report comparisons, raw-event/log comparisons, rejected hypotheses, and confirmation that production rollup made zero report-endpoint calls. The artifact must include sampledBusinessDates with at least three dates, sampledPartners with at least two partners, and productionReportEndpointCalls set to 0.
+Submit `/workspace/rollup/diagnosis/evidence.json` with a concise record of the runtime evidence used. The artifact must include sampledBusinessDates with at least three dates, sampledPartners with at least two partners, non-empty reportComparisons, non-empty rawEventLogComparisons, at least two rejectedHypotheses, and productionReportEndpointCalls set to 0.
 
 Do not hardcode outputs, edit protected files or tests, change runtime flags, disable partners, bypass partner endpoints, silence validation or logging, copy EOD reports into rollup output, or change unrelated behavior.

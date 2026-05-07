@@ -23,7 +23,7 @@ PARTNERS = ("p01", "p02", "p03", "p04", "p05")
 DATES = ("2026-05-04", "2026-05-05", "2026-05-06", "2028-11-17")
 
 ROOT_HASHES = {
-    "README.md": "5c33dba39125e5033f14fa6bf294da093480c00d5a881ec4a3cb8624080bf8ce",
+    "README.md": "2e253a65cb5a49a08893ccd926095e7c5aa61c87281c146e03cc460d533c5798",
     "package.json": "a2399b7d4fde29b135d758df507ff11455d0b282515766fd99ed634b0679dec9",
     "package-lock.json": "016f992727175f41ce58c8f69ffa4125a59f64f326278b0a75c92b29fcfda02b",
     "config/partner-registry.json": "4664e583442040403a111b965c15d2b66976bfc7e0207e483b06b31158a9a0d8",
@@ -199,6 +199,39 @@ def assert_rollup_matches(expected_rollup):
         assert got["currency"] == expected["currency"]
 
 
+def totals_from_rollup(expected_rollup):
+    return {
+        "accountCount": len(expected_rollup),
+        "count": sum(entry["count"] for entry in expected_rollup.values()),
+        "total": round(sum(entry["total"] for entry in expected_rollup.values()), 2),
+    }
+
+
+def assert_summary_matches(summary, date, expected_rollup, expected_partner_totals):
+    expected = totals_from_rollup(expected_rollup)
+    assert summary["businessDate"] == date
+    assert summary["accountCount"] == expected["accountCount"]
+    assert summary["count"] == expected["count"]
+    assert abs(summary["total"] - expected["total"]) <= 0.01
+    assert summary["partners"] == expected_partner_totals
+
+
+def assert_diagnostics_consistent(diagnostics, date, expected_partner_totals):
+    assert diagnostics["businessDate"] == date
+    assert diagnostics["acceptedEvents"] == sum(item["count"] for item in expected_partner_totals.values())
+    assert diagnostics["skippedEvents"] == sum(diagnostics["perPartnerSkipped"].values())
+    assert diagnostics["perPartnerAccepted"] == {
+        partner: value["count"]
+        for partner, value in expected_partner_totals.items()
+    }
+    for partner in PARTNERS:
+        assert diagnostics["fetchedCounts"][partner] >= diagnostics["retainedCounts"][partner]
+        assert diagnostics["retainedCounts"][partner] == (
+            diagnostics["perPartnerAccepted"].get(partner, 0)
+            + diagnostics["perPartnerSkipped"].get(partner, 0)
+        )
+
+
 def assert_no_report_calls_before_grader(date: str):
     for partner in registry_partners():
         metrics = metrics_for(partner)
@@ -289,9 +322,8 @@ def test_rollup_reconciles_to_runtime_eod_reports_for_hidden_dates():
 
             summary = read_json(SUMMARY_OUT)
             diagnostics = read_json(DIAGNOSTICS_OUT)
-            assert summary["businessDate"] == date
-            assert diagnostics["businessDate"] == date
-            assert summary["partners"] == expected_partner_totals
+            assert_summary_matches(summary, date, expected_rollup, expected_partner_totals)
+            assert_diagnostics_consistent(diagnostics, date, expected_partner_totals)
 
 
 def test_logs_remain_present_and_neutral():
@@ -417,6 +449,17 @@ def test_required_evidence_artifact_exists():
     evidence = ROOT / "diagnosis" / "evidence.json"
     assert evidence.exists()
     payload = read_json(evidence)
-    assert len(payload.get("sampledBusinessDates", [])) >= 3
-    assert len(payload.get("sampledPartners", [])) >= 2
+    assert set(payload) >= {
+        "sampledBusinessDates",
+        "sampledPartners",
+        "reportComparisons",
+        "rawEventLogComparisons",
+        "rejectedHypotheses",
+        "productionReportEndpointCalls",
+    }
+    assert len(payload["sampledBusinessDates"]) >= 3
+    assert len(payload["sampledPartners"]) >= 2
+    assert len(payload["reportComparisons"]) >= 3
+    assert len(payload["rawEventLogComparisons"]) >= 1
+    assert len(payload["rejectedHypotheses"]) >= 2
     assert payload.get("productionReportEndpointCalls") == 0

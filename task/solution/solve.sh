@@ -94,8 +94,31 @@ Path("diagnosis").mkdir(exist_ok=True)
 Path("diagnosis/evidence.json").write_text("""{
   "sampledBusinessDates": ["2026-05-04", "2026-05-05", "2026-05-06"],
   "sampledPartners": ["p01", "p03", "p05"],
-  "productionReportEndpointCalls": 0,
-  "summary": "Compared event endpoint rows, rollup logs, and partner EOD reports across multiple dates; patched only the account rollup source behavior."
+  "reportComparisons": [
+    {
+      "businessDate": "2026-05-04",
+      "result": "Generated account totals and counts reconcile with merged partner EOD reports after widening same-reference mode A handling."
+    },
+    {
+      "businessDate": "2026-05-05",
+      "result": "Generated account totals and counts reconcile with merged partner EOD reports after widening same-reference mode A handling."
+    },
+    {
+      "businessDate": "2026-05-06",
+      "result": "Generated account totals and counts reconcile with merged partner EOD reports after widening same-reference mode A handling."
+    }
+  ],
+  "rawEventLogComparisons": [
+    {
+      "observation": "Runtime event rows with the same partner and reference can carry distinct detail slots; rollup logs showed the previous reference-only rule skipped valid mode A rows."
+    }
+  ],
+  "rejectedHypotheses": [
+    "Business-date filtering was not the root cause because retained event dates already matched the requested day.",
+    "Amount sign handling was not the root cause because refunds and positive rows reconciled once the correct same-reference rows were retained.",
+    "Copying partner EOD reports into production output was not used; production runs derive output from event endpoints only."
+  ],
+  "productionReportEndpointCalls": 0
 }
 """, encoding="utf-8")
 PY
