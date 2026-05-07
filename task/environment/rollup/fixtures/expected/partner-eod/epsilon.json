@@ -1,0 +1,25 @@
+{
+  "partner": "epsilon",
+  "accounts": {
+    "acct-900": {
+      "total": 35,
+      "transactionCount": 2,
+      "currency": "USD"
+    },
+    "acct-901": {
+      "total": 0,
+      "transactionCount": 2,
+      "currency": "USD"
+    },
+    "acct-902": {
+      "total": 9.99,
+      "transactionCount": 1,
+      "currency": "USD"
+    },
+    "acct-903": {
+      "total": 5,
+      "transactionCount": 2,
+      "currency": "USD"
+    }
+  }
+}

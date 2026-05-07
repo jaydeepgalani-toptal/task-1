@@ -9,12 +9,26 @@ function requireText(value, label, partnerId) {
 
 function normalizePartner(partner) {
   const settlement = partner.settlement || {};
+  const eventIdentity = partner.eventIdentity || "stable-event";
+  const postingSequencePath = partner.postingSequencePath;
+
+  if (!["stable-event", "ledger-posting"].includes(eventIdentity)) {
+    throw new Error(`registry_invalid partner=${partner.id} field=eventIdentity`);
+  }
+  if (
+    eventIdentity === "ledger-posting" &&
+    (typeof postingSequencePath !== "string" || postingSequencePath.trim() === "")
+  ) {
+    throw new Error(`registry_invalid partner=${partner.id} field=postingSequencePath`);
+  }
 
   return {
     ...partner,
+    eventIdentity,
     profile: requireText(partner.profile, "profile", partner.id),
     sourceTsPath: requireText(partner.sourceTsPath, "sourceTsPath", partner.id),
     eventIdPath: requireText(partner.eventIdPath, "eventIdPath", partner.id),
+    postingSequencePath,
     accountPath: requireText(partner.accountPath, "accountPath", partner.id),
     settlement: {
       zone: requireText(settlement.zone, "settlement.zone", partner.id),

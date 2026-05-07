@@ -20,7 +20,9 @@ export async function fetchEvents(partner) {
 export function normalizeEvent(raw, partner, context) {
   return {
     partnerId: partner.id,
+    eventIdentity: partner.eventIdentity,
     eventId: context.readEventId(raw),
+    postingSequence: context.readPostingSequence(raw),
     accountId: context.readAccountId(raw),
     amount: amountFromNested(raw),
     currency: raw.currency || partner.currency,

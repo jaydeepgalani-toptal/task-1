@@ -20,6 +20,11 @@
       "total": 2.25,
       "transactionCount": 1,
       "currency": "USD"
+    },
+    "acct-880": {
+      "total": 4.44,
+      "transactionCount": 1,
+      "currency": "USD"
     }
   }
 }

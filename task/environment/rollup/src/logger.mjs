@@ -35,6 +35,7 @@ export function createLogger(logPath) {
         partner: event.partnerId,
         account: event.accountId,
         eventId: event.eventId,
+        postingSequence: event.postingSequence || "",
         amount: event.amount.toFixed(2),
         currency: event.currency
       });

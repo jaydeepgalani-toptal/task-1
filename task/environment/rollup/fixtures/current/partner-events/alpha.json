@@ -35,7 +35,23 @@
       "eventTs": "2026-05-06T16:00:00Z"
     },
     {
-      "eventId": "a-170",
+      "eventId": "a-dup",
+      "accountId": "acct-910",
+      "kind": "credit",
+      "amount": 5,
+      "currency": "USD",
+      "eventTs": "2026-05-06T14:00:00Z"
+    },
+    {
+      "eventId": "a-dup",
+      "accountId": "acct-910",
+      "kind": "credit",
+      "amount": 5,
+      "currency": "USD",
+      "eventTs": "2026-05-06T14:00:05Z"
+    },
+    {
+      "eventId": "a-late",
       "accountId": "acct-170",
       "kind": "credit",
       "amount": 2,

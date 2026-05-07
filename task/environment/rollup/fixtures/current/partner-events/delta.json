@@ -59,6 +59,34 @@
       "currency": "USD"
     },
     {
+      "eventId": "d-dup",
+      "record": {
+        "accountRef": "acct-881",
+        "eventTs": "2026-05-06T17:45:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-880",
+        "eventTs": "2026-05-06T18:00:00Z"
+      },
+      "entryType": "sale",
+      "amountMinorText": "444",
+      "currency": "USD"
+    },
+    {
+      "eventId": "d-dup",
+      "record": {
+        "accountRef": "acct-881",
+        "eventTs": "2026-05-06T17:46:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-880",
+        "eventTs": "2026-05-06T18:01:00Z"
+      },
+      "entryType": "sale",
+      "amountMinorText": "444",
+      "currency": "USD"
+    },
+    {
       "eventId": "d-465",
       "record": {
         "accountRef": "acct-466",

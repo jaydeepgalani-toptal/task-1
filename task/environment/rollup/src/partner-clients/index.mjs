@@ -2,13 +2,15 @@ import { getNormalizationContext } from "../payload-access.mjs";
 import * as alpha from "./alpha.mjs";
 import * as beta from "./beta.mjs";
 import * as delta from "./delta.mjs";
+import * as epsilon from "./epsilon.mjs";
 import * as gamma from "./gamma.mjs";
 
 const clients = {
   alpha,
   beta,
   gamma,
-  delta
+  delta,
+  epsilon
 };
 
 export async function fetchNormalizedPartnerEvents(partner) {

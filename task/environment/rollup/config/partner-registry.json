@@ -5,6 +5,7 @@
       "id": "alpha",
       "enabled": true,
       "baseUrl": "http://127.0.0.1:4101",
+      "eventIdentity": "stable-event",
       "eventIdPath": "eventId",
       "requestPath": "/events",
       "currency": "USD",
@@ -21,6 +22,7 @@
       "id": "beta",
       "enabled": true,
       "baseUrl": "http://127.0.0.1:4102",
+      "eventIdentity": "stable-event",
       "eventIdPath": "eventId",
       "requestPath": "/events",
       "currency": "USD",
@@ -37,6 +39,7 @@
       "id": "gamma",
       "enabled": true,
       "baseUrl": "http://127.0.0.1:4103",
+      "eventIdentity": "stable-event",
       "eventIdPath": "eventId",
       "requestPath": "/events",
       "currency": "USD",
@@ -53,6 +56,7 @@
       "id": "delta",
       "enabled": true,
       "baseUrl": "http://127.0.0.1:4104",
+      "eventIdentity": "stable-event",
       "eventIdPath": "eventId",
       "requestPath": "/events",
       "currency": "USD",
@@ -63,6 +67,24 @@
       "settlement": {
         "zone": "America/Los_Angeles",
         "cutoffLocal": "14:30"
+      }
+    },
+    {
+      "id": "epsilon",
+      "enabled": true,
+      "baseUrl": "http://127.0.0.1:4105",
+      "eventIdentity": "ledger-posting",
+      "eventIdPath": "ledger.id",
+      "postingSequencePath": "posting.sequence",
+      "requestPath": "/events",
+      "currency": "USD",
+      "profile": "clearing-ledger-v4",
+      "sortOrder": 50,
+      "sourceTsPath": "posting.postedAt",
+      "accountPath": "account.id",
+      "settlement": {
+        "zone": "America/Chicago",
+        "cutoffLocal": "17:30"
       }
     }
   ]

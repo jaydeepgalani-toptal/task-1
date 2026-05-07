@@ -50,7 +50,15 @@ function zonedParts(isoValue, zone) {
 }
 
 function contextCacheKey(partner) {
-  return partner.profile;
+  return JSON.stringify({
+    profile: partner.profile,
+    eventIdentity: partner.eventIdentity,
+    eventIdPath: partner.eventIdPath,
+    postingSequencePath: partner.postingSequencePath || "",
+    accountPath: partner.accountPath,
+    sourceTsPath: partner.sourceTsPath,
+    settlement: partner.settlement
+  });
 }
 
 export function compilePathReader(pathExpression) {
@@ -94,12 +102,16 @@ export function getNormalizationContext(partner) {
   
   const readEventId = compilePathReader(partner.eventIdPath);
   const readAccountId = compilePathReader(partner.accountPath);
+  const readPostingSequence = partner.postingSequencePath
+    ? compilePathReader(partner.postingSequencePath)
+    : () => undefined;
   const readEventTs = compilePathReader(partner.sourceTsPath);
   const settlement = { ...partner.settlement };
 
   const context = {
     readEventId,
     readAccountId,
+    readPostingSequence,
     readEventTs,
     resolveBusinessDate(raw) {
       return localBusinessDate(readEventTs(raw), settlement);

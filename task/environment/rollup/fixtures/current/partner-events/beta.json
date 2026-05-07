@@ -45,17 +45,37 @@
       "currency": "USD"
     },
     {
-      "eventId": "b-710",
+      "eventId": "b-dup",
       "record": {
-        "accountRef": "acct-710",
-        "eventTs": "2026-05-06T14:30:00Z"
+        "accountRef": "acct-720",
+        "eventTs": "2026-05-06T10:00:00Z"
       },
       "mirror": {
         "accountRef": "acct-950",
         "eventTs": "2026-05-06T23:59:00Z"
       },
       "entryType": "sale",
-      "amountMinor": 333,
+      "amountMinor": 800,
+      "posting": {
+        "sequence": "beta-audit-1"
+      },
+      "currency": "USD"
+    },
+    {
+      "eventId": "b-dup",
+      "record": {
+        "accountRef": "acct-720",
+        "eventTs": "2026-05-06T10:01:00Z"
+      },
+      "mirror": {
+        "accountRef": "acct-951",
+        "eventTs": "2026-05-06T23:58:00Z"
+      },
+      "entryType": "sale",
+      "amountMinor": 800,
+      "posting": {
+        "sequence": "beta-audit-2"
+      },
       "currency": "USD"
     },
     {
@@ -73,7 +93,7 @@
       "currency": "USD"
     },
     {
-      "eventId": "b-170",
+      "eventId": "b-late",
       "record": {
         "accountRef": "acct-170",
         "eventTs": "2026-05-06T16:00:00Z"

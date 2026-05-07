@@ -39,8 +39,9 @@ start_one alpha 4101
 start_one beta 4102
 start_one gamma 4103
 start_one delta 4104
+start_one epsilon 4105
 
-for port in 4101 4102 4103 4104; do
+for port in 4101 4102 4103 4104 4105; do
   for _ in $(seq 1 50); do
     if curl -fsS "http://127.0.0.1:${port}/health" >/dev/null 2>&1; then
       break

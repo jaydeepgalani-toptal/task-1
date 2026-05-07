@@ -59,7 +59,35 @@
       "currency": "USD"
     },
     {
-      "eventId": "g-810",
+      "eventId": "g-dup",
+      "clock": {
+        "eventTs": "2026-05-06T01:00:00Z"
+      },
+      "payload": {
+        "accountRef": "acct-820"
+      },
+      "entry": {
+        "code": "sale",
+        "amountText": "3.40"
+      },
+      "currency": "USD"
+    },
+    {
+      "eventId": "g-dup",
+      "clock": {
+        "eventTs": "2026-05-06T01:01:00Z"
+      },
+      "payload": {
+        "accountRef": "acct-820"
+      },
+      "entry": {
+        "code": "sale",
+        "amountText": "3.40"
+      },
+      "currency": "USD"
+    },
+    {
+      "eventId": "g-cut",
       "clock": {
         "eventTs": "2026-05-06T07:00:00Z"
       },

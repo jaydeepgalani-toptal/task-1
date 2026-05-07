@@ -3,7 +3,7 @@ function round2(value) {
 }
 
 function buildDedupKey(event) {
-  return `${event.partnerId}:${event.accountId}:${event.eventId}`;
+  return `${event.partnerId}:${event.eventId}`;
 }
 
 export function applyEvents(events, logger) {
@@ -27,7 +27,8 @@ export function applyEvents(events, logger) {
         action: "duplicate_skipped",
         partner: event.partnerId,
         account: event.accountId,
-        eventId: event.eventId
+        eventId: event.eventId,
+        postingSequence: event.postingSequence || ""
       });
       continue;
     }

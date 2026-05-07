@@ -1,13 +1,12 @@
-function signedAmount(raw) {
-  const rawAmount = raw.amount ?? raw.amountValue;
-  const amount = Number(rawAmount);
-  if (raw.kind === "refund") {
+function postingAmount(raw) {
+  const amount = Number(raw.posting.amountText);
+  if (raw.posting.type === "refund" || raw.posting.type === "reversal") {
     return -Math.abs(amount);
   }
-  if (raw.kind === "zero") {
+  if (raw.posting.type === "zero") {
     return 0;
   }
-  return Math.abs(amount);
+  return amount;
 }
 
 export async function fetchEvents(partner) {
@@ -25,7 +24,7 @@ export function normalizeEvent(raw, partner, context) {
     eventId: context.readEventId(raw),
     postingSequence: context.readPostingSequence(raw),
     accountId: context.readAccountId(raw),
-    amount: signedAmount(raw),
+    amount: postingAmount(raw),
     currency: raw.currency || partner.currency,
     eventTs: context.readEventTs(raw),
     businessDate: context.resolveBusinessDate(raw)

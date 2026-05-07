@@ -13,7 +13,9 @@ function minorAmount(raw) {
 export function normalizeLedgerEvent(raw, partner, context) {
   return {
     partnerId: partner.id,
+    eventIdentity: partner.eventIdentity,
     eventId: context.readEventId(raw),
+    postingSequence: context.readPostingSequence(raw),
     accountId: context.readAccountId(raw),
     amount: minorAmount(raw),
     currency: raw.currency || partner.currency,
