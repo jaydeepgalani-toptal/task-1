@@ -2,12 +2,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { applyEvents } from "./aggregation.mjs";
-import { createLogger } from "./logger.mjs";
-import { fetchNormalizedPartnerEvents } from "./partner-clients/index.mjs";
+import { getJson } from "./http-client.mjs";
+import { createLogger } from "./logging.mjs";
+import { normalizeEvent } from "./normalization.mjs";
 import { enabledPartners, loadRegistry } from "./registry.mjs";
 import { writeRollupReports } from "./report-writer.mjs";
 import { validateNormalizedEvent } from "./validation.mjs";
-import { isRequestedBusinessDay } from "./workset.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
@@ -18,88 +18,93 @@ function round2(value) {
 }
 
 function parseArgs(argv) {
-  return {
-    diagnostics: argv.includes("--diagnostics"),
-    help: argv.includes("--help")
+  const args = {
+    diagnostics: false,
+    help: false,
+    businessDate: process.env.BUSINESS_DATE || "2026-05-06"
   };
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const value = argv[index];
+    if (value === "--diagnostics") {
+      args.diagnostics = true;
+    } else if (value === "--help") {
+      args.help = true;
+    } else if (value === "--business-date") {
+      args.businessDate = argv[index + 1];
+      index += 1;
+    }
+  }
+
+  return args;
 }
 
 function usage() {
-  console.log("daily-account-rollup [--diagnostics] [--help]");
+  console.log("daily-account-rollup [--business-date YYYY-MM-DD] [--diagnostics] [--help]");
+}
+
+function eventsUrl(partner, businessDate) {
+  const url = new URL(partner.eventsPath, partner.baseUrl);
+  url.searchParams.set("businessDate", businessDate);
+  return url.toString();
 }
 
 export async function runRollupJob(options = {}) {
   const registryPath = options.registryPath || process.env.REGISTRY_PATH || path.join(rootDir, "config", "partner-registry.json");
+  const businessDate = options.businessDate || process.env.BUSINESS_DATE || "2026-05-06";
   const outDir = path.join(rootDir, "out");
   const logPath = path.join(rootDir, "logs", "rollup.log");
   const registry = loadRegistry(registryPath);
-  const orderOverride = options.partnerOrder
-    || (process.env.PARTNER_ORDER || "")
-      .split(",")
-      .map((value) => value.trim())
-      .filter(Boolean);
-  const diagnosticsEnabled = options.diagnostics ?? false;
-  const partners = enabledPartners(registry, orderOverride);
+  const partners = enabledPartners(registry);
   const logger = createLogger(logPath);
   const allEvents = [];
   const fetchedCounts = {};
   const retainedCounts = {};
 
-  logger.info({ stage: "parsing", action: "begin", businessDate: registry.businessDate });
+  logger.info({ event: "begin", businessDate });
 
   for (const partner of partners) {
-    logger.info({ stage: "routing", partner: partner.id, url: `${partner.baseUrl}${partner.requestPath}` });
-    const result = await fetchNormalizedPartnerEvents(partner);
-    fetchedCounts[partner.id] = result.fetchedCount;
-    logger.info({ stage: "validation", partner: partner.id, fetchedCount: result.fetchedCount });
+    logger.info({ event: "request", partnerId: partner.partnerId });
+    const payload = await getJson(eventsUrl(partner, businessDate));
+    const normalized = payload.events.map((source) => normalizeEvent(source, partner));
+    fetchedCounts[partner.partnerId] = normalized.length;
 
-    for (const event of result.events) {
+    for (const event of normalized) {
       validateNormalizedEvent(event);
-      if (isRequestedBusinessDay(event, registry.businessDate)) {
+      if (event.businessDate === businessDate) {
         allEvents.push(event);
-        retainedCounts[partner.id] = (retainedCounts[partner.id] || 0) + 1;
+        retainedCounts[partner.partnerId] = (retainedCounts[partner.partnerId] || 0) + 1;
       }
     }
-
-    logger.info({ stage: "schema-mapping", partner: partner.id, normalizedCount: result.events.length });
   }
 
-  logger.info({ stage: "aggregation", action: "begin", candidateEvents: allEvents.length });
   const aggregated = applyEvents(allEvents, logger);
-
   const totalAmount = round2(
     Object.values(aggregated.rollup).reduce((sum, value) => sum + value.total, 0)
   );
-  const totalTransactions = Object.values(aggregated.rollup).reduce(
-    (sum, value) => sum + value.transactionCount,
+  const totalCount = Object.values(aggregated.rollup).reduce(
+    (sum, value) => sum + value.count,
     0
   );
   const summary = {
-    businessDate: registry.businessDate,
+    businessDate,
     accountCount: Object.keys(aggregated.rollup).length,
-    transactionCount: totalTransactions,
-    grandTotal: totalAmount,
+    count: totalCount,
+    total: totalAmount,
     partners: aggregated.partnerSummary
   };
   const diagnostics = {
-    businessDate: registry.businessDate,
+    businessDate,
     fetchedCounts,
     retainedCounts,
     acceptedEvents: aggregated.diagnostics.acceptedEvents,
-    duplicateEvents: aggregated.diagnostics.duplicateEvents,
+    skippedEvents: aggregated.diagnostics.skippedEvents,
     perPartnerAccepted: aggregated.diagnostics.perPartnerAccepted,
-    perPartnerDuplicates: aggregated.diagnostics.perPartnerDuplicates
+    perPartnerSkipped: aggregated.diagnostics.perPartnerSkipped
   };
 
-  logger.info({ stage: "summary-reporting", accountCount: summary.accountCount, transactionCount: summary.transactionCount });
   writeRollupReports(outDir, aggregated.rollup, summary, diagnostics);
-  logger.info({ stage: "diagnostics", duplicateEvents: diagnostics.duplicateEvents, acceptedEvents: diagnostics.acceptedEvents });
-
-  if (diagnosticsEnabled) {
-    logger.info({ stage: "diagnostics", action: "extended" });
-  }
-
-  logger.info({ stage: "verification", action: "completed" });
+  logger.info({ event: "completed", businessDate, accountCount: summary.accountCount, count: summary.count });
   return { registry, summary, diagnostics };
 }
 
@@ -110,18 +115,14 @@ async function main() {
     return;
   }
 
-  await runRollupJob({ diagnostics: args.diagnostics });
+  await runRollupJob({ businessDate: args.businessDate, diagnostics: args.diagnostics });
 }
 
 if (entryPath === fileURLToPath(import.meta.url)) {
   main().catch((error) => {
     const logPath = path.join(rootDir, "logs", "rollup.log");
     const logger = createLogger(logPath);
-    logger.error({
-      stage: "validation",
-      action: "failed",
-      error: error.message
-    });
+    logger.error({ message: error.message });
     process.exit(1);
   });
 }

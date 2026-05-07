@@ -1,91 +1,69 @@
 {
-  "businessDate": "2026-05-06",
   "partners": [
     {
-      "id": "alpha",
+      "partnerId": "p01",
       "enabled": true,
       "baseUrl": "http://127.0.0.1:4101",
-      "eventIdentity": "stable-event",
-      "eventIdPath": "eventId",
-      "requestPath": "/events",
+      "eventsPath": "/events",
+      "reportPath": "/reports/eod",
       "currency": "USD",
-      "profile": "card-direct-v1",
-      "sortOrder": 10,
-      "sourceTsPath": "eventTs",
-      "accountPath": "accountId",
-      "settlement": {
-        "zone": "America/New_York",
-        "cutoffLocal": "18:00"
-      }
+      "accountField": "account",
+      "amountField": "amount",
+      "timestampField": "timestamp",
+      "referenceField": "reference",
+      "settlementCutoff": "17:00:00"
     },
     {
-      "id": "beta",
+      "partnerId": "p02",
       "enabled": true,
       "baseUrl": "http://127.0.0.1:4102",
-      "eventIdentity": "stable-event",
-      "eventIdPath": "eventId",
-      "requestPath": "/events",
+      "eventsPath": "/events",
+      "reportPath": "/reports/eod",
       "currency": "USD",
-      "profile": "ledger-wire-v2",
-      "sortOrder": 20,
-      "sourceTsPath": "record.eventTs",
-      "accountPath": "record.accountRef",
-      "settlement": {
-        "zone": "Europe/London",
-        "cutoffLocal": "17:00"
-      }
+      "accountField": "acct",
+      "amountField": "value",
+      "timestampField": "time",
+      "referenceField": "ref",
+      "settlementCutoff": "16:30:00"
     },
     {
-      "id": "gamma",
+      "partnerId": "p03",
       "enabled": true,
       "baseUrl": "http://127.0.0.1:4103",
-      "eventIdentity": "stable-event",
-      "eventIdPath": "eventId",
-      "requestPath": "/events",
+      "eventsPath": "/events",
+      "reportPath": "/reports/eod",
       "currency": "USD",
-      "profile": "settle-pack-v3",
-      "sortOrder": 30,
-      "sourceTsPath": "clock.eventTs",
-      "accountPath": "payload.accountRef",
-      "settlement": {
-        "zone": "Asia/Tokyo",
-        "cutoffLocal": "16:00"
-      }
+      "accountField": "row.acct",
+      "amountField": "row.value",
+      "timestampField": "row.when",
+      "referenceField": "row.ref",
+      "settlementCutoff": "18:15:00"
     },
     {
-      "id": "delta",
+      "partnerId": "p04",
       "enabled": true,
       "baseUrl": "http://127.0.0.1:4104",
-      "eventIdentity": "stable-event",
-      "eventIdPath": "eventId",
-      "requestPath": "/events",
+      "eventsPath": "/events",
+      "reportPath": "/reports/eod",
       "currency": "USD",
-      "profile": "ledger-wire-v2",
-      "sortOrder": 40,
-      "sourceTsPath": "mirror.eventTs",
-      "accountPath": "mirror.accountRef",
-      "settlement": {
-        "zone": "America/Los_Angeles",
-        "cutoffLocal": "14:30"
-      }
+      "accountField": "payload.account",
+      "amountField": "payload.amount",
+      "timestampField": "payload.at",
+      "referenceField": "payload.reference",
+      "settlementCutoff": "15:45:00"
     },
     {
-      "id": "epsilon",
+      "partnerId": "p05",
       "enabled": true,
       "baseUrl": "http://127.0.0.1:4105",
-      "eventIdentity": "ledger-posting",
-      "eventIdPath": "ledger.id",
-      "postingSequencePath": "posting.sequence",
-      "requestPath": "/events",
+      "eventsPath": "/events",
+      "reportPath": "/reports/eod",
       "currency": "USD",
-      "profile": "clearing-ledger-v4",
-      "sortOrder": 50,
-      "sourceTsPath": "posting.postedAt",
-      "accountPath": "account.id",
-      "settlement": {
-        "zone": "America/Chicago",
-        "cutoffLocal": "17:30"
-      }
+      "accountField": "item.a",
+      "amountField": "item.m",
+      "timestampField": "item.t",
+      "referenceField": "item.r",
+      "settlementCutoff": "17:30:00"
     }
   ]
 }

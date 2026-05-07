@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV NVM_DIR=/root/.nvm
 
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends python3 python3-pip jq curl ca-certificates ripgrep tmux asciinema tzdata \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends python3 python3-pip jq curl ca-certificates ripgrep tmux asciinema tzdata file binutils \
     && curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash \
     && . "$NVM_DIR/nvm.sh" && nvm install 22 \
     && npm install -g @openai/codex@latest \
@@ -19,6 +19,7 @@ COPY rollup /workspace/rollup
 COPY scripts/ /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/* \
+    && chmod +x /workspace/rollup/bin/partner-service \
     && cd /workspace/rollup \
     && npm ci \
     && /usr/local/bin/reset-rollup-runtime

@@ -1,0 +1,37 @@
+#!/bin/bash
+set -euo pipefail
+
+ROOT=/workspace/rollup
+STATE_DIR="$ROOT/runtime/service-state"
+PID_DIR="$ROOT/runtime/pids"
+
+mkdir -p "$STATE_DIR" "$PID_DIR" "$ROOT/logs"
+/usr/local/bin/stop-partner-services >/dev/null 2>&1 || true
+
+start_one() {
+  local partner="$1"
+  local port="$2"
+  local log_path="$ROOT/logs/service-${partner}.log"
+  "$ROOT/bin/partner-service" \
+    --partner "$partner" \
+    --port "$port" \
+    --state-dir "$STATE_DIR" \
+    >"$log_path" 2>&1 &
+  echo $! > "$PID_DIR/${partner}.pid"
+}
+
+start_one p01 4101
+start_one p02 4102
+start_one p03 4103
+start_one p04 4104
+start_one p05 4105
+
+for port in 4101 4102 4103 4104 4105; do
+  for _ in $(seq 1 50); do
+    if curl -fsS "http://127.0.0.1:${port}/health" >/dev/null 2>&1; then
+      break
+    fi
+    sleep 0.1
+  done
+  curl -fsS "http://127.0.0.1:${port}/health" >/dev/null
+done

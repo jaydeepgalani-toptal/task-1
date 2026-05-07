@@ -9,7 +9,6 @@
   },
   "scripts": {
     "start": "node src/index.mjs",
-    "diagnostics": "node src/index.mjs --diagnostics",
-    "inspect": "node tools/inspect-rollup.mjs"
+    "diagnostics": "node src/index.mjs --diagnostics"
   }
 }

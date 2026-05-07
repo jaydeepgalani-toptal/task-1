@@ -1,0 +1,10 @@
+# Daily Account Rollup
+
+This workspace contains a local account rollup service. Start the local partner services, run the rollup for a business date, then inspect generated reports and logs under `out/` and `logs/`.
+
+```bash
+/usr/local/bin/start-partner-services
+/usr/local/bin/run-rollup --business-date 2026-05-06 --diagnostics
+```
+
+Partner report endpoints may be queried during investigation. The production rollup should generate its output from partner event endpoints.
