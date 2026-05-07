@@ -23,7 +23,7 @@ PARTNERS = ("p01", "p02", "p03", "p04", "p05")
 DATES = ("2026-05-04", "2026-05-05", "2026-05-06", "2028-11-17")
 
 ROOT_HASHES = {
-    "README.md": "33eea5ff7fced5637508989264532d925368efc754a959143d4fdd9c3c967402",
+    "README.md": "5c33dba39125e5033f14fa6bf294da093480c00d5a881ec4a3cb8624080bf8ce",
     "package.json": "a2399b7d4fde29b135d758df507ff11455d0b282515766fd99ed634b0679dec9",
     "package-lock.json": "016f992727175f41ce58c8f69ffa4125a59f64f326278b0a75c92b29fcfda02b",
     "config/partner-registry.json": "4664e583442040403a111b965c15d2b66976bfc7e0207e483b06b31158a9a0d8",
@@ -206,12 +206,11 @@ def assert_no_report_calls_before_grader(date: str):
         assert metrics["reports"].get(date, 0) == 0
 
 
-def authored_public_files():
+def protected_public_files():
     roots = [
         ROOT / "README.md",
         ROOT / "package.json",
         REGISTRY,
-        ROOT / "src",
         Path("/usr/local/bin/reset-rollup-runtime"),
         Path("/usr/local/bin/start-partner-services"),
         Path("/usr/local/bin/stop-partner-services"),
@@ -228,7 +227,7 @@ def authored_public_files():
 
 def public_text_for_audit():
     items = []
-    for path in authored_public_files():
+    for path in protected_public_files():
         items.append((str(path), path.read_text(encoding="utf-8", errors="ignore")))
     for path in [ROOT / "fixtures", ROOT / "mock", ROOT / "tools"]:
         if path.exists():
@@ -324,6 +323,58 @@ def test_source_does_not_fetch_eod_reports_during_production_run():
     source_text = "\n".join(path.read_text(encoding="utf-8") for path in production_paths)
     assert "reportPath" not in source_text
     assert "/reports/eod" not in source_text
+
+
+def test_same_reference_detail_handling_generalizes_beyond_sampled_dates():
+    script = """
+import { applyEvents } from "./src/aggregation.mjs";
+
+const calls = [];
+const logger = {
+  accepted(event) {
+    calls.push(["accepted", event.reference, event.amount, event.source?.detail?.mode, event.source?.detail?.slot]);
+  },
+  skipped(event) {
+    calls.push(["skipped", event.reference, event.amount, event.source?.detail?.mode, event.source?.detail?.slot]);
+  }
+};
+
+function event(slot, amount) {
+  return {
+    partnerId: "p01",
+    account: "A-general",
+    amount,
+    currency: "USD",
+    timestamp: "2029-02-03T12:00:00Z",
+    reference: "R-general",
+    businessDate: "2029-02-03",
+    source: {
+      detail: {
+        mode: "A",
+        slot
+      }
+    }
+  };
+}
+
+const result = applyEvents([
+  event("1", 10),
+  event("2", 5),
+  event("2", 5)
+], logger);
+
+const account = result.rollup["A-general"];
+if (!account || account.total !== 15 || account.count !== 2) {
+  console.error(JSON.stringify({ result, calls }, null, 2));
+  process.exit(1);
+}
+if (result.diagnostics.acceptedEvents !== 2 || result.diagnostics.skippedEvents !== 1) {
+  console.error(JSON.stringify({ diagnostics: result.diagnostics, calls }, null, 2));
+  process.exit(2);
+}
+"""
+    result = run(["node", "--input-type=module", "-e", script], cwd=ROOT, check=False)
+    assert result.returncode == 0, result.stdout + result.stderr
 
 
 def test_validation_still_rejects_malformed_required_fields():
