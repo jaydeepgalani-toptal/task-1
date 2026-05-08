@@ -20,6 +20,8 @@ COPY rollup /workspace/rollup
 COPY scripts/ /usr/local/bin/
 
 RUN chmod +x /usr/local/bin/* \
+    && gzip -dc /workspace/rollup/bin/partner-service.gz > /workspace/rollup/bin/partner-service \
+    && rm /workspace/rollup/bin/partner-service.gz \
     && chmod +x /workspace/rollup/bin/partner-service \
     && cd /workspace/rollup \
     && npm ci \
